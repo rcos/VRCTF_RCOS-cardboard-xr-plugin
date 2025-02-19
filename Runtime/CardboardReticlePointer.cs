@@ -181,7 +181,7 @@ public class CardboardReticlePointer : MonoBehaviour
         }
 
         // Checks for screen touches.
-        if (Google.XR.Cardboard.Api.IsTriggerPressed)
+        if (Google.XR.Cardboard.Api.IsTriggerPressed || Input.GetMouseButtonDown(0))
         {
             if (IsInteractive(_gazedAtObject))
             {
