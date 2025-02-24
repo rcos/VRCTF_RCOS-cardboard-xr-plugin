@@ -18,6 +18,7 @@
 
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Draws a circular reticle in front of any object that the user points at.
@@ -125,6 +126,11 @@ public class CardboardReticlePointer : MonoBehaviour
     /// The current outer diameter of the reticle, before distance multiplication (in meters).
     /// </summary>
     private float _reticleOuterDiameter;
+    
+    /// <summary>
+    /// Whether the action button is held down or not.
+    /// </summary>
+    private bool isReticleFree;
 
     /// <summary>
     /// Start is called before the first frame update.
@@ -137,6 +143,8 @@ public class CardboardReticlePointer : MonoBehaviour
         _reticleMaterial = rendererComponent.material;
 
         CreateMesh();
+
+        isReticleFree = true;
     }
 
     /// <summary>
@@ -181,12 +189,17 @@ public class CardboardReticlePointer : MonoBehaviour
         }
 
         // Checks for screen touches.
-        if (Google.XR.Cardboard.Api.IsTriggerPressed || Input.GetMouseButtonDown(0))
+        if (Google.XR.Cardboard.Api.IsTriggerPressed || Mouse.current.leftButton.wasPressedThisFrame)
         {
-            if (IsInteractive(_gazedAtObject))
+            if (IsInteractive(_gazedAtObject) && isReticleFree)
             {
-                _gazedAtObject?.SendMessage("OnPointerClick");
+                _gazedAtObject?.SendMessage("OnPointerClick", hit);
+                isReticleFree = false;
             }
+        }
+        else
+        {
+            isReticleFree = true;
         }
 
         UpdateDiameters();
