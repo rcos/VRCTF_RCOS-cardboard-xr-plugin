@@ -133,6 +133,11 @@ public class CardboardReticlePointer : MonoBehaviour
     private bool isReticleFree;
 
     /// <summary>
+    /// Whether the action button is held down or not
+    /// </summary>
+    private bool isReticleFree;
+
+    /// <summary>
     /// Start is called before the first frame update.
     /// </summary>
     private void Start()
@@ -142,6 +147,8 @@ public class CardboardReticlePointer : MonoBehaviour
 
         _reticleMaterial = rendererComponent.material;
 
+        isReticleFree = true;
+        
         CreateMesh();
 
         isReticleFree = true;
@@ -189,11 +196,18 @@ public class CardboardReticlePointer : MonoBehaviour
         }
 
         // Checks for screen touches.
-        if (Google.XR.Cardboard.Api.IsTriggerPressed || Mouse.current.leftButton.wasPressedThisFrame)
+        if (Google.XR.Cardboard.Api.IsTriggerPressed || Mouse.current.leftButton.isPressed)
         {
             if (IsInteractive(_gazedAtObject) && isReticleFree)
             {
-                _gazedAtObject?.SendMessage("OnPointerClick", hit);
+                if (_gazedAtObject.tag == "WalkableFloor")
+                {
+                    _gazedAtObject?.SendMessage("OnPointerClick", hit);
+                }
+                else
+                {
+                    _gazedAtObject?.SendMessage("OnPointerClick");
+                }
                 isReticleFree = false;
             }
         }
