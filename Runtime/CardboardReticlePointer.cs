@@ -133,11 +133,6 @@ public class CardboardReticlePointer : MonoBehaviour
     private bool isReticleFree;
 
     /// <summary>
-    /// Whether the action button is held down or not
-    /// </summary>
-    private bool isReticleFree;
-
-    /// <summary>
     /// Start is called before the first frame update.
     /// </summary>
     private void Start()
@@ -150,8 +145,6 @@ public class CardboardReticlePointer : MonoBehaviour
         isReticleFree = true;
         
         CreateMesh();
-
-        isReticleFree = true;
     }
 
     /// <summary>
