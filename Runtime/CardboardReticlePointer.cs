@@ -158,7 +158,7 @@ public class CardboardReticlePointer : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.forward, out hit, _RETICLE_MAX_DISTANCE))
         {
             if (hit.transform.gameObject != null && hit.transform.tag == "WalkableFloor") { // Send RaycastHit every time looking at floor. Could also include other tags
-                Camera.main.SendMessage("PointerLooking", hit);
+                Camera.main.SendMessage("PointerLooking", hit, SendMessageOptions.DontRequireReceiver);
             }
 
             // GameObject detected in front of the camera.
@@ -169,11 +169,11 @@ public class CardboardReticlePointer : MonoBehaviour
                 {
                     if (_gazedAtObject?.tag == "WalkableFloor")
                     {
-                        Camera.main.SendMessage("OnPointerLeave");
+                        Camera.main.SendMessage("OnPointerLeave", SendMessageOptions.DontRequireReceiver);
                     }
                     else
                     {
-                        _gazedAtObject?.SendMessage("OnPointerExit");
+                        _gazedAtObject?.SendMessage("OnPointerExit", SendMessageOptions.DontRequireReceiver);
                     }
                 }
 
@@ -181,7 +181,7 @@ public class CardboardReticlePointer : MonoBehaviour
 
                 if (IsInteractive(_gazedAtObject))
                 {
-                    _gazedAtObject.SendMessage("OnPointerEnter");
+                    _gazedAtObject.SendMessage("OnPointerEnter", SendMessageOptions.DontRequireReceiver);
                 }
             }
 
@@ -194,11 +194,11 @@ public class CardboardReticlePointer : MonoBehaviour
             {
                 if (_gazedAtObject?.tag == "WalkableFloor")
                 {
-                    Camera.main.SendMessage("OnPointerLeave");
+                    Camera.main.SendMessage("OnPointerLeave", SendMessageOptions.DontRequireReceiver);
                 }
                 else
                 {
-                    _gazedAtObject?.SendMessage("OnPointerExit");
+                    _gazedAtObject?.SendMessage("OnPointerExit", SendMessageOptions.DontRequireReceiver);
                 }
             }
 
@@ -213,11 +213,11 @@ public class CardboardReticlePointer : MonoBehaviour
             {
                 if (_gazedAtObject?.tag == "WalkableFloor")
                 {
-                    Camera.main.SendMessage("OnPointerClickMove", hit);
+                    Camera.main.SendMessage("OnPointerClickMove", hit, SendMessageOptions.DontRequireReceiver);
                 }
                 else
                 {
-                    _gazedAtObject?.SendMessage("OnPointerClick");
+                    _gazedAtObject?.SendMessage("OnPointerClick", SendMessageOptions.DontRequireReceiver);
                 }
                 isReticleFree = false;
             }
