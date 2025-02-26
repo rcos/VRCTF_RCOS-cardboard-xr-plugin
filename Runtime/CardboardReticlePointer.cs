@@ -157,13 +157,24 @@ public class CardboardReticlePointer : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, _RETICLE_MAX_DISTANCE))
         {
+            if (hit.transform.gameObject != null && hit.transform.tag == "WalkableFloor") { // Send RaycastHit every time looking at floor. Could also include other tags
+                Camera.main.SendMessage("PointerLooking", hit);
+            }
+
             // GameObject detected in front of the camera.
             if (_gazedAtObject != hit.transform.gameObject)
             {
                 // New GameObject.
                 if (IsInteractive(_gazedAtObject))
                 {
-                    _gazedAtObject?.SendMessage("OnPointerExit");
+                    if (_gazedAtObject?.tag == "WalkableFloor")
+                    {
+                        Camera.main.SendMessage("OnPointerLeave");
+                    }
+                    else
+                    {
+                        _gazedAtObject?.SendMessage("OnPointerExit");
+                    }
                 }
 
                 _gazedAtObject = hit.transform.gameObject;
@@ -181,7 +192,14 @@ public class CardboardReticlePointer : MonoBehaviour
             // No GameObject detected in front of the camera.
             if (IsInteractive(_gazedAtObject))
             {
-                _gazedAtObject?.SendMessage("OnPointerExit");
+                if (_gazedAtObject?.tag == "WalkableFloor")
+                {
+                    Camera.main.SendMessage("OnPointerLeave");
+                }
+                else
+                {
+                    _gazedAtObject?.SendMessage("OnPointerExit");
+                }
             }
 
             _gazedAtObject = null;
@@ -193,9 +211,9 @@ public class CardboardReticlePointer : MonoBehaviour
         {
             if (IsInteractive(_gazedAtObject) && isReticleFree)
             {
-                if (_gazedAtObject.tag == "WalkableFloor")
+                if (_gazedAtObject?.tag == "WalkableFloor")
                 {
-                    _gazedAtObject?.SendMessage("OnPointerClick", hit);
+                    Camera.main.SendMessage("OnPointerClickMove", hit);
                 }
                 else
                 {
