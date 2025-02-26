@@ -85,7 +85,7 @@ public class CardboardReticlePointer : MonoBehaviour
     /// <summary>
     /// Number of segments making the reticle circle.
     /// </summary>
-    private const int _RETICLE_SEGMENTS = 20;
+    private int _RETICLE_SEGMENTS = 20;
 
     /// <summary>
     /// Growth speed multiplier for the reticle.
@@ -182,6 +182,9 @@ public class CardboardReticlePointer : MonoBehaviour
                 if (IsInteractive(_gazedAtObject))
                 {
                     _gazedAtObject.SendMessage("OnPointerEnter", SendMessageOptions.DontRequireReceiver);
+                    _RETICLE_SEGMENTS = 20;
+                    if (_gazedAtObject?.tag == "WalkableFloor") _RETICLE_SEGMENTS = 3;
+                    CreateMesh();
                 }
             }
 
@@ -304,7 +307,9 @@ public class CardboardReticlePointer : MonoBehaviour
     private void CreateMesh()
     {
         Mesh mesh = new Mesh();
-        gameObject.AddComponent<MeshFilter>();
+        if (gameObject.GetComponent<MeshFilter>() == null) {
+            gameObject.AddComponent<MeshFilter>();
+        }
         GetComponent<MeshFilter>().mesh = mesh;
 
         int segments_count = _RETICLE_SEGMENTS;
