@@ -203,6 +203,8 @@ public class CardboardReticlePointer : MonoBehaviour
                 {
                     _gazedAtObject?.SendMessage("OnPointerExit", SendMessageOptions.DontRequireReceiver);
                 }
+                _RETICLE_SEGMENTS = 20;
+                CreateMesh();
             }
 
             _gazedAtObject = null;
